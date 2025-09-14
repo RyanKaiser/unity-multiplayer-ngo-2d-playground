@@ -75,7 +75,7 @@ namespace RMC.Playground2D.SA
             string localRole = MultiplayerConstants.GetRoleNameByIsHost(isHost);
             string playerName = $"Player {localPlayerIndex}\n<size=0.08>({localRole})</size>";
             PlayerSA player = networkObject.GetComponent<PlayerSA>();
-            player.PlayerName.Value = playerName;
+            player.SetPlayerNameServerRpc(playerName, networkObject.OwnerClientId);
         }
         
         private void SetPlayerPosition(NetworkObject networkObject, int localPlayerIndex)

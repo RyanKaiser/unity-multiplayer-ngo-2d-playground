@@ -124,6 +124,24 @@ namespace RMC.Playground2D.SA
 			}
 		}
 
+		[ServerRpc(RequireOwnership = false)]
+		public void SetPlayerNameServerRpc(string playerName, ulong clientId)
+		{
+			if (OwnerClientId == clientId)
+			{
+				SetPlayerNameClientRpc(playerName);
+			}
+		}
+
+		[ClientRpc]
+		private void SetPlayerNameClientRpc(string playerName)
+		{
+			if (IsOwner)
+			{
+				PlayerName.Value = playerName;
+			}
+		}
+
 		
 		private void RespondToMoveRequest(Vector2 deltaPosition)
 		{
@@ -169,9 +187,10 @@ namespace RMC.Playground2D.SA
 			_nameTagUI.NameTagText.text = newValue.ToString();
 		}
 		
-		
 		public void OnCollisionEnter2D ( Collision2D collision2D)
 		{
+			if (!IsOwner) return;
+		
 			Crate crate = collision2D.gameObject.GetComponent<Crate>();
 			if (crate != null)
 			{
